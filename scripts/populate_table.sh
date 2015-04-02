@@ -12,5 +12,5 @@ pig -f scripts/add_geohash.pig
 /usr/hdp/current/phoenix-client/bin/psql.py $ZK_HOST:2181:/hbase-unsecure scripts/create_table.sql
 
 # Load the crime data with geohash via Pig 
-pig -f scripts/ingest_crime_data.pig -param ZKHOST=$ZK_HOST
+pig -f scripts/ingest_crime_data.pig -param ZK_HOST=$ZK_HOST
 
