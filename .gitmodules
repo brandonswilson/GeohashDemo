@@ -1,0 +1,3 @@
+[submodule "GeohashPigUDF"]
+	path = GeohashPigUDF
+	url = https://github.com/brandonswilson/GeohashPigUDF.git
