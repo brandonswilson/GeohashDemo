@@ -1,9 +1,24 @@
 # GeohashDemo
 
+## Objective: 
+The goal of this project is to demostrate computing and querying over geohashes in Apache Phoenix/HBase.
+
+## Overview
+Data often has an associated latitude and longitude and is frequently queried based on spatial constraints. Querying 2-d geographic data by a bounding box in a range-partitioned database, such as HBase, often requires indexing one of the two dimensions and then brute-force searching over the other. This essentially equates to quickly grabbing a stripe of data around the whole world and then brute force search along the non-indexed dimension. 
+
+Geohashing reduces a two-dimensional lat/long coordinate system to a one-dimensional system where spatially close coordinates are lexicographically close to one another. This simplifies querying by bounding box to a single search across the indexed geohash dimension. The result of this query may contain false positives (results that lie outside of the bounding box) but will not miss any data that falls within the bounding box. Essentially what this does is very quickly reduces the target search area and then the remaining false positives can be weeded out.
+
+This code in this repository leverages Apache Pig to apply a geohash to a sample dataset that has an associated lat/lon and then load that data into an Apache Phoenix table. The table is then available to be queried by geohash as noted in the examples below. Note that all of the data is from the City of Chicago Data Portal (https://data.cityofchicago.org/). Geohashes can be computed at this web site if you would like to build your own queries: http://geohash.org/
+
 To clone the project ensure that you include the --recursive flag for git.
 
+Notes/Todo:
+- This project does not pre-split the Phoenix table. Ideally, the table would be pre-split based on key distribution to ensure that loading is as efficient as possible.
+- Data could also be loaded via the Hive PhoenixStorageHandler and a custom Hive UDF (https://github.com/gbraccialli/GeohashHiveUDF).  
+- Deeper analytics can be performed by snapshotting the HBase table and mapping from Hive.
+
 ## Pre-requisites:
-* This has been build and tested against HDP 2.2.
+This has been build and tested against HDP 2.2. Prerequisites include:
 * Pig
 * HBase
 * Phoenix
